@@ -277,17 +277,17 @@ def assign_blade_structural_webs_values(wt_opt, modeling_options, structure):
             )(nd_span)
         )
 
-        web_offset = np.nan_to_num(
-            PchipInterpolator(
-                offset_grid,
-                offset_values,
-                extrapolate=False,
-            )(nd_span)
-        )
-
         wt_opt["blade.structure.web_start_nd_yaml"][i, :] = web_start_nd
-        wt_opt["blade.structure.web_offset"][i, :] = web_offset
-        wt_opt["blade.structure.web_rotation"][i] = web_rotation
+        if build_web:
+            web_offset = np.nan_to_num(
+                PchipInterpolator(
+                    offset_grid,
+                    offset_values,
+                    extrapolate=False,
+                )(nd_span)
+            )
+            wt_opt["blade.structure.web_offset"][i, :] = web_offset
+            wt_opt["blade.structure.web_rotation"][i] = web_rotation
         wt_opt["blade.structure.build_web"][i] = build_web
 
         # web_end_nd

@@ -1,0 +1,16 @@
+layer,Initial,cap_both,cap_PS,cap_SS
+UV_protection,20.97,20.98,20.98,20.98
+Shell_skin_outer,254.54,254.69,254.69,254.69
+Spar_cap_ss,133.42,125.77,133.50,125.77
+Spar_cap_ps,133.42,125.77,125.77,133.50
+LE_reinf,33.91,33.97,33.97,33.97
+TE_reinf_ss,8.50,8.51,8.51,8.51
+TE_reinf_ps,8.50,8.51,8.51,8.51
+Shell_skin_inner,233.95,234.09,234.09,234.09
+Web_aft_skin_le,5.66,6.31,6.31,6.31
+Web_aft_filler,289.81,322.81,322.81,322.81
+Web_aft_skin_te,5.66,6.31,6.31,6.31
+Web_rear_skin_le,6.13,6.31,6.31,6.31
+Web_rear_filler,313.23,322.81,322.81,322.81
+Web_rear_skin_te,6.13,6.31,6.31,6.31
+TOTAL,1453.85,1483.17,1490.90,1490.90

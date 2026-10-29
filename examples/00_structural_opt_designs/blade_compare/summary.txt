@@ -1,0 +1,68 @@
+Blade structural comparison
+  Initial: /home/s2001300/simulations/261006_Q3v5_structural_design/05_WISDEM/00_compare_designs/Q3v5_windio_v2.yaml  (14 layers, 2 webs)
+  cap_both: /home/s2001300/simulations/261006_Q3v5_structural_design/05_WISDEM/00_compare_designs/cap_both.yaml  (14 layers, 2 webs)
+  cap_PS: /home/s2001300/simulations/261006_Q3v5_structural_design/05_WISDEM/00_compare_designs/cap_PS.yaml  (14 layers, 2 webs)
+  cap_SS: /home/s2001300/simulations/261006_Q3v5_structural_design/05_WISDEM/00_compare_designs/cap_SS.yaml  (14 layers, 2 webs)
+
+Estimated layer mass per blade [kg]
+layer                        Initial      cap_both        cap_PS        cap_SS
+UV_protection                   21.0          21.0          21.0          21.0
+Shell_skin_outer               254.5         254.7         254.7         254.7
+Spar_cap_ss                    133.4         125.8         133.5         125.8
+Spar_cap_ps                    133.4         125.8         125.8         133.5
+LE_reinf                        33.9          34.0          34.0          34.0
+TE_reinf_ss                      8.5           8.5           8.5           8.5
+TE_reinf_ps                      8.5           8.5           8.5           8.5
+Shell_skin_inner               233.9         234.1         234.1         234.1
+Web_aft_skin_le                  5.7           6.3           6.3           6.3
+Web_aft_filler                 289.8         322.8         322.8         322.8
+Web_aft_skin_te                  5.7           6.3           6.3           6.3
+Web_rear_skin_le                 6.1           6.3           6.3           6.3
+Web_rear_filler                313.2         322.8         322.8         322.8
+Web_rear_skin_te                 6.1           6.3           6.3           6.3
+TOTAL                         1453.9        1483.2        1490.9        1490.9
+
+Changes Initial -> cap_both (max over span, location in r/R):
+  layer                    |Δt| [mm]  at r/R  |Δ start arc|  |Δ end arc|
+  UV_protection                0.000       –         0.0000       0.0000   (unchanged)
+  Shell_skin_outer             0.000       –         0.0000       0.0000   (unchanged)
+  Spar_cap_ss                 24.580    0.18         0.0000       0.0000
+  Spar_cap_ps                 24.580    0.18         0.0000       0.0000
+  LE_reinf                     0.000       –         0.0186       0.0184
+  TE_reinf_ss                  0.000       –         0.0000       0.0000   (unchanged)
+  TE_reinf_ps                  0.000       –         0.0000       0.0000   (unchanged)
+  Shell_skin_inner             0.000       –         0.0000       0.0000   (unchanged)
+  Web_aft_skin_le              0.000       –         0.1007       0.0978
+  Web_aft_filler               0.000       –         0.1007       0.0978
+  Web_aft_skin_te              0.000       –         0.1007       0.0978
+  Web_rear_skin_le             0.000       –         0.0544       0.0563
+  Web_rear_filler              0.000       –         0.0544       0.0563
+  Web_rear_skin_te             0.000       –         0.0544       0.0563
+
+Spar caps and webs at r/R = 0.50:
+  Initial      Spar_cap_ss      width 0.488 m, centre x/c 0.280
+  Initial      Spar_cap_ps      width 0.488 m, centre x/c 0.264
+  Initial      fore_web         nd arc ss 0.403 ps 0.606, x/c ss 0.170 ps 0.170
+  Initial      rear_web         nd arc ss 0.304 ps 0.704, x/c ss 0.378 ps 0.378
+  cap_both     Spar_cap_ss      width 0.488 m, centre x/c 0.280
+  cap_both     Spar_cap_ps      width 0.488 m, centre x/c 0.264
+  cap_both     fore_web         nd arc ss 0.343 ps 0.649, x/c ss 0.296 ps 0.262
+  cap_both     rear_web         nd arc ss 0.343 ps 0.649, x/c ss 0.296 ps 0.262
+  cap_PS       Spar_cap_ss      width 0.488 m, centre x/c 0.280
+  cap_PS       Spar_cap_ps      width 0.488 m, centre x/c 0.264
+  cap_PS       fore_web         nd arc ss 0.343 ps 0.649, x/c ss 0.296 ps 0.262
+  cap_PS       rear_web         nd arc ss 0.343 ps 0.649, x/c ss 0.296 ps 0.262
+  cap_SS       Spar_cap_ss      width 0.488 m, centre x/c 0.280
+  cap_SS       Spar_cap_ps      width 0.488 m, centre x/c 0.264
+  cap_SS       fore_web         nd arc ss 0.343 ps 0.649, x/c ss 0.296 ps 0.262
+  cap_SS       rear_web         nd arc ss 0.343 ps 0.649, x/c ss 0.296 ps 0.262
+
+Checks
+  WARNING cap_both: webs 'fore_web' and 'rear_web' sit at the same position – check the web anchors / design variables.
+  WARNING cap_PS: webs 'fore_web' and 'rear_web' sit at the same position – check the web anchors / design variables.
+  WARNING cap_SS: webs 'fore_web' and 'rear_web' sit at the same position – check the web anchors / design variables.
+
+Blade length along reference axis: Initial 6.00 m, cap_both 6.00 m, cap_PS 6.00 m, cap_SS 6.00 m
+  cap_both: mass from inertia_matrix 1470 kg, laminate estimate 1483 kg (101 %)
+  cap_PS: mass from inertia_matrix 1477 kg, laminate estimate 1491 kg (101 %)
+  cap_SS: mass from inertia_matrix 1477 kg, laminate estimate 1491 kg (101 %)

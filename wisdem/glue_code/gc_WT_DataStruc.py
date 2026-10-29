@@ -1535,6 +1535,10 @@ class Compute_Blade_Structure(om.ExplicitComponent):
 
         # Compute the start and end points of the webs
         for j in range(self.n_webs):
+            if not discrete_inputs["build_web"][j]:
+                web_start_nd[j, :] = inputs["web_start_nd_yaml"][j, :]
+                web_end_nd[j, :] = inputs["web_end_nd_yaml"][j, :]
+                continue
             for i in range(self.n_span):
 
                 xy_coord_i = inputs["coord_xy_dim"][i, :, :]
