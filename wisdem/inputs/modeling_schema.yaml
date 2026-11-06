@@ -40,7 +40,7 @@ properties:
                 properties:
                     flag: &flag
                         type: [boolean, string]
-                        enum: [true, false, True, False, TRUE, FALSE, 0, 1, user_elastic, User_Elastic, USER_ELASTIC]
+                        enum: [true, false, True, False, TRUE, FALSE, 0, 1, user_elastic, User_Elastic, USER_ELASTIC, sonata]
                         default: False
                         description: Whether or not to run this module or pull from elastic properties
                     n_aoa:
@@ -961,14 +961,14 @@ properties:
                 description: Density of air.
                 units: kg/m^3
                 minimum: 0
-                maximum: 1.5
+                maximum: 1025
                 default: 1.225
             air_dyn_viscosity:
                 type: number
                 description: Dynamic viscosity of air.
                 units: kg/(m*s)
                 minimum: 0
-                maximum: 2.e-5
+                maximum: 0.1
                 default: 1.81e-5
             air_pressure:
                 type: number

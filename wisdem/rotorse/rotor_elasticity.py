@@ -1522,12 +1522,17 @@ class RotorElasticity(Group):
             "flap_iner",
         ]
 
+
         if modeling_options["user_elastic"]["blade"]:
             self.add_subsystem("generate_KI", assemble_KI(modeling_options=modeling_options), promotes=['*'])
             self.add_subsystem("precomp", KI_to_Elastic(modeling_options=modeling_options), promotes=['*'])
 
-        else:
+        elif modeling_options["sonata"]["blade"]:
+            print("\nSONATA blade elasticity is not yet implemented. Please use user_elastic or precomp.")
+            # self.add_system("sonata", RunSonata(modeling_options=modeling_options), promotes=['*'])
+            # to write code for sonata connector to glue code
 
+        else:
             self.add_subsystem(
                 "precomp",
                 RunPreComp(modeling_options=modeling_options, opt_options=opt_options),

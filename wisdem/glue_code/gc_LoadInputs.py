@@ -76,6 +76,7 @@ class WindTurbineOntologyPython(object):
         # Even if the block is in the inputs, the user can turn off via modeling options
         # The "flags" here should come in as a string, not Boolean, to allow for the user_elastic option
         self.modeling_options["user_elastic"] = {m: False for m in flags.keys()}
+        self.modeling_options["sonata"] = {m: False for m in flags.keys()}
 
         flag_pairings = [
             ("blade", "RotorSE"),
@@ -99,6 +100,12 @@ class WindTurbineOntologyPython(object):
             ):
                 self.modeling_options["user_elastic"][i] = True
                 flags[i] = False
+            if (
+                isinstance(self.modeling_options["WISDEM"][j]["flag"], str)
+                and self.modeling_options["WISDEM"][j]["flag"].lower() == "sonata"
+            ):
+                self.modeling_options["sonata"][i] = True
+
         flags["hub"] = flags["drivetrain"] = (
             flags["hub"] or flags["drivetrain"]
         )  # Hub and drivetrain have to go together
