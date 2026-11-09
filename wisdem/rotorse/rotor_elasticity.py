@@ -2,6 +2,7 @@ import copy
 import os
 
 import numpy as np
+import yaml
 from openmdao.api import Group, ExplicitComponent
 from scipy.interpolate import PchipInterpolator
 
@@ -833,6 +834,88 @@ class RunSonata(ExplicitComponent):
         # A file path is configuration, not a variable the optimizer changes,
         # so it is kept as an attribute rather than an OpenMDAO input.
         self.template_file = rotorse_options["SONATA"]["template_file"]
+
+        # Read the template once. compute() works on copies of this dictionary,
+        # so the file is never read again or rewritten during the optimization.
+        # Same loader as SONATA's Blade(filename=...), so both routes see the
+        # same data.
+        with open(self.template_file, "r") as f:
+            self.template_yml = yaml.load(f, Loader=yaml.FullLoader)
+
+        # Blade(filename=...) checks this; build_blade() bypasses it, so check here
+        blade_yml = self.template_yml.get("components", {}).get("blade", {})
+        if "outer_shape_bem" in blade_yml or "outer_shape" not in blade_yml:
+            raise ValueError(
+                f"{self.template_file} is not a windIO v2 file (found 'outer_shape_bem' instead of "
+                "'outer_shape'). SONATA reads windIO v2 only."
+            )
+
+        # SONATA settings used by Blade.read_yaml. Plotting and recovery are off
+        # because this runs inside the optimization loop.
+        # TODO: move mesh_resolution, stations and cutoff_style to the modeling options
+        self.sonata_flags = {
+            "flag_wt_ontology": True,  # windIO definition of the blade
+            "flag_ref_axes_wt": True,  # rotate the windIO reference axes to the SONATA convention
+            "c2_axis": False,
+            "mesh_resolution": 400,  # points along the profile used to mesh each section
+            "attribute_str": "MatID",
+            "flag_plotDisplacement": False,
+            "flag_plotTheta11": False,
+            "flag_wf": False,
+            "flag_lft": False,
+            "flag_topo": False,
+            "flag_recovery": False,
+        }
+        self.sonata_stations = np.linspace(0.0, 1.0, 11)  # r/R of the analysed sections
+        self.sonata_cutoff_style = 2  # 0 step, 2 round
+
+        self.add_input(
+            
+        )
+
+    def build_blade(self, yml=None):
+        """Build a SONATA Blade from a windIO v2 dictionary, without any file.
+
+        Does what Blade(filename=...) does in its __init__ (SONATA/classBlade.py),
+        minus reading the file: store the dictionary, read the materials and
+        airfoils, then call read_yaml, which builds the sections.
+
+        yml: the turbine dictionary to analyse, normally a copy of
+             self.template_yml with the optimizer's values written in. If None,
+             the template itself is used. It is deep-copied here, so SONATA can
+             never modify the caller's dictionary or the template.
+
+        Returns the Blade, ready for blade_gen_section().
+        """
+        from SONATA.classAirfoil import Airfoil
+        from SONATA.classBlade import Blade
+        from SONATA.classMaterial import read_materials
+
+        yml = copy.deepcopy(self.template_yml if yml is None else yml)
+
+        # No filename, so Blade.__init__ only initializes the object
+        job = Blade(
+            name=yml.get("name", "blade"),
+            flags=self.sonata_flags,
+            cutoff_style=self.sonata_cutoff_style,
+            stations=self.sonata_stations,
+        )
+
+        # read_yaml takes the blade name from job.yml, and sonata2rotorse.from_job
+        # reads chord and twist from it, so it must be the analysed dictionary
+        job.yml = yml
+        # read_yaml uses job.materials, so set them first
+        job.materials = read_materials(yml.get("materials"))
+        airfoils = [Airfoil(af) for af in yml.get("airfoils")]
+
+        job.read_yaml(
+            yml.get("components").get("blade"),
+            airfoils,
+            stations=self.sonata_stations,
+            flags=self.sonata_flags,
+            cutoff_style=self.sonata_cutoff_style,
+        )
+        return job
 
 
     def simulation(self):
