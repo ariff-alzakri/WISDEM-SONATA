@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 
 import wisdem.inputs as sch
@@ -13,11 +15,41 @@ class WindTurbineOntologyPython(object):
         else:
             self.wt_init = sch.load_geometry_yaml(fname_input_wt)
         self.set_run_flags()
+        self.set_sonata_options(fname_input_wt, fname_input_modeling)
         self.set_openmdao_vectors()
         self.set_opt_flags()
 
     def get_input_data(self):
         return self.wt_init, self.modeling_options, self.analysis_options
+
+    def set_sonata_options(self, fname_input_wt, fname_input_modeling):
+        # Resolve the SONATA template file to an absolute path so that the
+        # RunSonata component does not depend on the current working directory.
+        if not self.modeling_options["sonata"]["blade"]:
+            return
+
+        sonata_options = self.modeling_options["WISDEM"]["RotorSE"]["SONATA"]
+        template_file = sonata_options["template_file"]
+
+        if template_file == "":
+            # Default to the turbine geometry file given to WISDEM
+            if not isinstance(fname_input_wt, str):
+                raise ValueError(
+                    "RotorSE flag is set to sonata but no SONATA template file is given. Set "
+                    "WISDEM:RotorSE:SONATA:template_file in the modeling options (the turbine "
+                    "geometry was passed as a dictionary, so it cannot be used as the template)."
+                )
+            template_file = fname_input_wt
+        elif not os.path.isabs(template_file) and isinstance(fname_input_modeling, str):
+            # Relative paths are taken from the folder of the modeling options file
+            modeling_dir = os.path.dirname(os.path.realpath(fname_input_modeling))
+            template_file = os.path.join(modeling_dir, template_file)
+
+        template_file = os.path.realpath(template_file)
+        if not os.path.isfile(template_file):
+            raise FileNotFoundError(f"SONATA template file not found: {template_file}")
+
+        sonata_options["template_file"] = template_file
 
     def set_run_flags(self):
         # Create components flag struct

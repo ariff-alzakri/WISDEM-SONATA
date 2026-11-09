@@ -165,6 +165,15 @@ properties:
                         type: boolean
                         default: False
                         description: Whether or not to optimize the placement of the webs and caps in the blade for along maximum chordwise thickness.
+                    SONATA:
+                        type: object
+                        default: {}
+                        description: Options for computing the blade cross-sectional properties with SONATA instead of PreComp. Used only when flag is set to sonata.
+                        properties:
+                            template_file:
+                                type: string
+                                default: ""
+                                description: Path to the windIO v2 yaml file that SONATA starts from. A relative path is taken from the folder of the modeling options file. If empty, the turbine geometry file given to WISDEM is used.
             DriveSE:
                 type: object
                 default: {}
